@@ -1,0 +1,20 @@
+# Build output
+build/
+build_*/
+*.o
+*.d
+
+# Python
+__pycache__/
+*.pyc
+
+# Written per machine by install-linux.sh, with absolute paths
+ht5023-flasher.desktop
+
+# Local environment
+.env
+.env.*
+
+# Editors / OS
+*.swp
+.DS_Store

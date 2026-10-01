@@ -1,0 +1,4 @@
+r
+halt
+mem32 0xE000ED00, 1
+q

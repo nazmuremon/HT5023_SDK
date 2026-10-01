@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Shim so scripts/run_flash.sh and friends can call "JLinkExe" everywhere.
+#
+#   Linux/macOS: SEGGER ships the real JLinkExe. Use it wherever it landed --
+#                /usr/bin (symlink), /opt/SEGGER/JLink, or a versioned dir.
+#   Git Bash on Windows: there is no JLinkExe at all, so fall back to JLink.exe
+#                under "C:\Program Files\SEGGER".
+#
+# Put this folder on PATH only if you want the shim; the scripts find SEGGER's
+# own binary first in every case.
+set -uo pipefail
+
+self="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/$(basename -- "${BASH_SOURCE[0]}")"
+resolve() { readlink -f -- "$1" 2>/dev/null || printf '%s' "$1"; }
+
+# A real JLinkExe elsewhere on PATH wins -- skipping this script, or it would
+# re-exec itself forever.
+while IFS= read -r cand; do
+    [ -x "$cand" ] || continue
+    [ "$(resolve "$cand")" = "$(resolve "$self")" ] && continue
+    exec "$cand" "$@"
+done < <(type -pa JLinkExe 2>/dev/null || true)
+
+# Newest version first, so JLink_V794 beats JLink_V780.
+for d in $(ls -d /opt/SEGGER/JLink* /usr/lib/JLink* /usr/local/lib/JLink* 2>/dev/null | sort -r); do
+    [ -x "$d/JLinkExe" ] && exec "$d/JLinkExe" "$@"
+done
+
+for d in $(ls -d "/c/Program Files/SEGGER"/JLink* "/c/Program Files (x86)/SEGGER"/JLink* 2>/dev/null | sort -r); do
+    [ -x "$d/JLink.exe" ] && exec "$d/JLink.exe" "$@"
+done
+
+cat >&2 <<'EOF'
+JLinkExe not found.
+
+Install the SEGGER J-Link software:  https://www.segger.com/downloads/jlink/
+On Debian/Ubuntu the .deb installs it as /opt/SEGGER/JLink/JLinkExe.
+
+The J-Link is only needed for SWD programming and semihosting. A board that
+already carries the UART bootloader uploads over the USB adapter alone --
+choose "via: USB (bootloader)" in the Flasher.
+EOF
+exit 1

@@ -1,0 +1,50 @@
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "HT5023",
+      "compilerPath": "arm-none-eabi-gcc",
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "defines": [
+        "__ARM_ARCH_6M__",
+        "__CORTEX_M=0"
+      ],
+      "includePath": [
+        "${workspaceFolder}/sdk/include",
+        "${workspaceFolder}/sdk/cores/ht5023/include",
+        "${workspaceFolder}/sdk/boards/ht5023_blinky/include",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/lib/ht5023_uart/include",
+        "${workspaceFolder}/lib/ht5023_log/include",
+        "${workspaceFolder}/lib/ht5023_debug/include",
+        "${workspaceFolder}/lib/ht5023_boot_banner/include",
+        "${workspaceFolder}/lib/ht5023_dma/include",
+        "${workspaceFolder}/lib/ht5023_wdt/include",
+        "${workspaceFolder}/lib/ht5023_timer/include",
+        "${workspaceFolder}/lib/ht5023_reset/include",
+        "${workspaceFolder}/lib/ht5023_ringbuf/include",
+        "${workspaceFolder}/lib/ht5023_spi/include",
+        "${workspaceFolder}/lib/ht5023_i2c/include",
+        "${workspaceFolder}/lib/ht5023_systick/include",
+        "${workspaceFolder}/lib/ht5023_buzzer/include",
+        "${workspaceFolder}/lib/ht5023_st7789/include",
+        "${workspaceFolder}/lib/ht5023_gfx/include",
+        "${workspaceFolder}/lib/ht5023_font5x7/include",
+        "${workspaceFolder}/lib/ht5023_text/include",
+        "${workspaceFolder}/lib/ht5023_fb/include",
+        "${workspaceFolder}/lib/ht5023_xpt2046/include",
+        "${workspaceFolder}/examples"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}/sdk",
+          "${workspaceFolder}/src",
+          "${workspaceFolder}/lib",
+          "${workspaceFolder}/examples"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    }
+  ]
+}

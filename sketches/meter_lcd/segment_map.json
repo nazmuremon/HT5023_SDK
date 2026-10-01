@@ -1,0 +1,889 @@
+{
+  "cursor": 56,
+  "glass": "ht5023_energy_meter_v1 U11, 21 SEG x 8 COM",
+  "index": "position = (glass SEG - 1) * 8 + (COM star - 1)",
+  "positions": {
+    "0": {
+      "com": 1,
+      "element": "big1.a",
+      "label": "Big digit 1 \u00b7 top (a)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:50:35"
+    },
+    "1": {
+      "com": 2,
+      "element": "big1.f",
+      "label": "Big digit 1 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:51:05"
+    },
+    "10": {
+      "com": 3,
+      "element": "big2.b",
+      "label": "Big digit 2 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:54:54"
+    },
+    "106": {
+      "com": 3,
+      "element": "icon.quad",
+      "label": "Quadrant (\u2295) symbol",
+      "note": "",
+      "seg": 14,
+      "status": "found",
+      "time": "2026-10-01T10:59:18"
+    },
+    "114": {
+      "com": 3,
+      "element": "icon.antenna",
+      "label": "Antenna / signal bars",
+      "note": "",
+      "seg": 15,
+      "status": "found",
+      "time": "2026-10-01T10:59:24"
+    },
+    "12": {
+      "com": 5,
+      "element": "big2.e",
+      "label": "Big digit 2 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:54:59"
+    },
+    "120": {
+      "com": 1,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 16,
+      "status": "nothing",
+      "time": "2026-10-01T10:52:55"
+    },
+    "121": {
+      "com": 2,
+      "element": "icon.unit_W",
+      "label": "kWArhz \u00b7 W",
+      "note": "",
+      "seg": 16,
+      "status": "different",
+      "time": "2026-10-01T10:58:19"
+    },
+    "122": {
+      "com": 3,
+      "element": "icon.credit",
+      "label": "CREDIT",
+      "note": "",
+      "seg": 16,
+      "status": "found",
+      "time": "2026-10-01T10:53:52"
+    },
+    "123": {
+      "com": 4,
+      "element": "icon.credit_batt",
+      "label": "CREDIT battery",
+      "note": "",
+      "seg": 16,
+      "status": "found",
+      "time": "2026-10-01T10:54:04"
+    },
+    "128": {
+      "com": 1,
+      "element": "icon.unit_k",
+      "label": "kWArhz \u00b7 k",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:57:33"
+    },
+    "129": {
+      "com": 2,
+      "element": "icon.unit_W",
+      "label": "kWArhz \u00b7 W",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:57:38"
+    },
+    "13": {
+      "com": 6,
+      "element": "big2.c",
+      "label": "Big digit 2 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:03"
+    },
+    "130": {
+      "com": 3,
+      "element": "icon.unit_r",
+      "label": "kWArhz \u00b7 r",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:57:49"
+    },
+    "131": {
+      "com": 4,
+      "element": "icon.unit_A",
+      "label": "kWArhz \u00b7 A",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:57:57"
+    },
+    "132": {
+      "com": 5,
+      "element": "icon.unit_A",
+      "label": "kWArhz \u00b7 A",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:58:13"
+    },
+    "133": {
+      "com": 6,
+      "element": "icon.unit_r",
+      "label": "kWArhz \u00b7 r",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:58:07"
+    },
+    "134": {
+      "com": 7,
+      "element": "icon.unit_h",
+      "label": "kWArhz \u00b7 h",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:58:34"
+    },
+    "135": {
+      "com": 8,
+      "element": "icon.unit_z",
+      "label": "kWArhz \u00b7 z",
+      "note": "",
+      "seg": 17,
+      "status": "found",
+      "time": "2026-10-01T10:58:38"
+    },
+    "136": {
+      "com": 1,
+      "element": "big8.a",
+      "label": "Big digit 8 \u00b7 top (a)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:31"
+    },
+    "137": {
+      "com": 2,
+      "element": "big8.f",
+      "label": "Big digit 8 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:07"
+    },
+    "138": {
+      "com": 3,
+      "element": "big8.b",
+      "label": "Big digit 8 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:09"
+    },
+    "139": {
+      "com": 4,
+      "element": "big8.g",
+      "label": "Big digit 8 \u00b7 middle (g)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:04"
+    },
+    "14": {
+      "com": 7,
+      "element": "big2.d",
+      "label": "Big digit 2 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:54:36"
+    },
+    "140": {
+      "com": 5,
+      "element": "big8.e",
+      "label": "Big digit 8 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:12"
+    },
+    "141": {
+      "com": 6,
+      "element": "big8.c",
+      "label": "Big digit 8 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:15"
+    },
+    "142": {
+      "com": 7,
+      "element": "big8.d",
+      "label": "Big digit 8 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 18,
+      "status": "confirmed",
+      "time": "2026-10-01T10:57:02"
+    },
+    "143": {
+      "com": 8,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 18,
+      "status": "nothing",
+      "time": "2026-10-01T10:54:30"
+    },
+    "144": {
+      "com": 1,
+      "element": "big7.a",
+      "label": "Big digit 7 \u00b7 top (a)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:26"
+    },
+    "145": {
+      "com": 2,
+      "element": "big7.f",
+      "label": "Big digit 7 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:46"
+    },
+    "146": {
+      "com": 3,
+      "element": "big7.b",
+      "label": "Big digit 7 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:50"
+    },
+    "147": {
+      "com": 4,
+      "element": "big7.g",
+      "label": "Big digit 7 \u00b7 middle (g)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:44"
+    },
+    "148": {
+      "com": 5,
+      "element": "big7.e",
+      "label": "Big digit 7 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:56"
+    },
+    "149": {
+      "com": 6,
+      "element": "big7.c",
+      "label": "Big digit 7 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:59"
+    },
+    "15": {
+      "com": 8,
+      "element": "big2.tri",
+      "label": "Big digit 2 \u00b7 \u25bd below",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:52:15"
+    },
+    "150": {
+      "com": 7,
+      "element": "big7.d",
+      "label": "Big digit 7 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 19,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:41"
+    },
+    "151": {
+      "com": 8,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 19,
+      "status": "nothing",
+      "time": "2026-10-01T10:54:15"
+    },
+    "152": {
+      "com": 1,
+      "element": "big6.a",
+      "label": "Big digit 6 \u00b7 top (a)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:23"
+    },
+    "153": {
+      "com": 2,
+      "element": "big6.f",
+      "label": "Big digit 6 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:31"
+    },
+    "154": {
+      "com": 3,
+      "element": "big6.b",
+      "label": "Big digit 6 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:34"
+    },
+    "155": {
+      "com": 4,
+      "element": "big6.g",
+      "label": "Big digit 6 \u00b7 middle (g)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:27"
+    },
+    "156": {
+      "com": 5,
+      "element": "big6.e",
+      "label": "Big digit 6 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:36"
+    },
+    "157": {
+      "com": 6,
+      "element": "big6.c",
+      "label": "Big digit 6 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:39"
+    },
+    "158": {
+      "com": 7,
+      "element": "big6.d",
+      "label": "Big digit 6 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 20,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:25"
+    },
+    "159": {
+      "com": 8,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 20,
+      "status": "nothing",
+      "time": "2026-10-01T10:53:06"
+    },
+    "16": {
+      "com": 1,
+      "element": "big3.a",
+      "label": "Big digit 3 \u00b7 top (a)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:09"
+    },
+    "160": {
+      "com": 1,
+      "element": "big5.a",
+      "label": "Big digit 5 \u00b7 top (a)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:18"
+    },
+    "161": {
+      "com": 2,
+      "element": "big5.f",
+      "label": "Big digit 5 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:15"
+    },
+    "162": {
+      "com": 3,
+      "element": "big5.b",
+      "label": "Big digit 5 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:18"
+    },
+    "163": {
+      "com": 4,
+      "element": "big5.g",
+      "label": "Big digit 5 \u00b7 middle (g)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:13"
+    },
+    "164": {
+      "com": 5,
+      "element": "big5.e",
+      "label": "Big digit 5 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:21"
+    },
+    "165": {
+      "com": 6,
+      "element": "big5.c",
+      "label": "Big digit 5 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:23"
+    },
+    "166": {
+      "com": 7,
+      "element": "big5.d",
+      "label": "Big digit 5 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 21,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:11"
+    },
+    "167": {
+      "com": 8,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 21,
+      "status": "nothing",
+      "time": "2026-10-01T10:53:32"
+    },
+    "17": {
+      "com": 2,
+      "element": "big3.f",
+      "label": "Big digit 3 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:38"
+    },
+    "18": {
+      "com": 3,
+      "element": "big3.b",
+      "label": "Big digit 3 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:43"
+    },
+    "19": {
+      "com": 4,
+      "element": "big3.g",
+      "label": "Big digit 3 \u00b7 middle (g)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:41"
+    },
+    "2": {
+      "com": 3,
+      "element": "big1.b",
+      "label": "Big digit 1 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:51:14"
+    },
+    "20": {
+      "com": 5,
+      "element": "big3.e",
+      "label": "Big digit 3 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:46"
+    },
+    "21": {
+      "com": 6,
+      "element": "big3.c",
+      "label": "Big digit 3 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:50"
+    },
+    "22": {
+      "com": 7,
+      "element": "big3.d",
+      "label": "Big digit 3 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:52"
+    },
+    "23": {
+      "com": 8,
+      "element": "big3.tri",
+      "label": "Big digit 3 \u00b7 \u25bd below",
+      "note": "",
+      "seg": 3,
+      "status": "confirmed",
+      "time": "2026-10-01T10:52:30"
+    },
+    "24": {
+      "com": 1,
+      "element": "big4.a",
+      "label": "Big digit 4 \u00b7 top (a)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:13"
+    },
+    "25": {
+      "com": 2,
+      "element": "big4.f",
+      "label": "Big digit 4 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:01"
+    },
+    "26": {
+      "com": 3,
+      "element": "big4.b",
+      "label": "Big digit 4 \u00b7 upper right (b)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:03"
+    },
+    "27": {
+      "com": 4,
+      "element": "big4.g",
+      "label": "Big digit 4 \u00b7 middle (g)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:58"
+    },
+    "28": {
+      "com": 5,
+      "element": "big4.e",
+      "label": "Big digit 4 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:05"
+    },
+    "29": {
+      "com": 6,
+      "element": "big4.c",
+      "label": "Big digit 4 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:56:08"
+    },
+    "3": {
+      "com": 4,
+      "element": "big1.g",
+      "label": "Big digit 1 \u00b7 middle (g)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:50:54"
+    },
+    "30": {
+      "com": 7,
+      "element": "big4.d",
+      "label": "Big digit 4 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 4,
+      "status": "confirmed",
+      "time": "2026-10-01T10:55:55"
+    },
+    "31": {
+      "com": 8,
+      "element": "big4.tri",
+      "label": "Big digit 4 \u00b7 \u25bd below",
+      "note": "",
+      "seg": 4,
+      "status": "found",
+      "time": "2026-10-01T10:52:36"
+    },
+    "4": {
+      "com": 5,
+      "element": "big1.e",
+      "label": "Big digit 1 \u00b7 lower left (e)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:51:33"
+    },
+    "5": {
+      "com": 6,
+      "element": "big1.c",
+      "label": "Big digit 1 \u00b7 lower right (c)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:51:38"
+    },
+    "6": {
+      "com": 7,
+      "element": "big1.d",
+      "label": "Big digit 1 \u00b7 bottom (d)",
+      "note": "",
+      "seg": 1,
+      "status": "confirmed",
+      "time": "2026-10-01T10:51:00"
+    },
+    "7": {
+      "com": 8,
+      "element": "big1.tri",
+      "label": "Big digit 1 \u00b7 \u25bd below",
+      "note": "",
+      "seg": 1,
+      "status": "found",
+      "time": "2026-10-01T10:51:44"
+    },
+    "72": {
+      "com": 1,
+      "element": "icon.T",
+      "label": "T",
+      "note": "",
+      "seg": 10,
+      "status": "found",
+      "time": "2026-10-01T11:01:16"
+    },
+    "73": {
+      "com": 2,
+      "element": "box10.d",
+      "label": "Boxed character \u00b7 bottom (d)",
+      "note": "",
+      "seg": 10,
+      "status": "found",
+      "time": "2026-10-01T11:01:24"
+    },
+    "74": {
+      "com": 3,
+      "element": "box10.e",
+      "label": "Boxed character \u00b7 lower left (e)",
+      "note": "",
+      "seg": 10,
+      "status": "found",
+      "time": "2026-10-01T11:01:30"
+    },
+    "75": {
+      "com": 4,
+      "element": "box10.g",
+      "label": "Boxed character \u00b7 middle (g)",
+      "note": "",
+      "seg": 10,
+      "status": "found",
+      "time": "2026-10-01T11:01:38"
+    },
+    "77": {
+      "com": 6,
+      "element": "box10.b",
+      "label": "Boxed character \u00b7 upper right (b)",
+      "note": "",
+      "seg": 10,
+      "status": "found",
+      "time": "2026-10-01T11:01:58"
+    },
+    "8": {
+      "com": 1,
+      "element": "big2.a",
+      "label": "Big digit 2 \u00b7 top (a)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:54:46"
+    },
+    "80": {
+      "com": 1,
+      "element": "char11.f",
+      "label": "Small character \u00b7 upper left (f)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:01:04"
+    },
+    "81": {
+      "com": 2,
+      "element": "char11.d",
+      "label": "Small character \u00b7 bottom (d)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:00:26"
+    },
+    "82": {
+      "com": 3,
+      "element": "char11.c",
+      "label": "Small character \u00b7 lower right (c)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:00:36"
+    },
+    "83": {
+      "com": 4,
+      "element": "char11.g",
+      "label": "Small character \u00b7 middle (g)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:00:47"
+    },
+    "84": {
+      "com": 5,
+      "element": "char11.b",
+      "label": "Small character \u00b7 upper right (b)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:01:07"
+    },
+    "85": {
+      "com": 6,
+      "element": "char11.e",
+      "label": "Small character \u00b7 lower left (e)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:01:12"
+    },
+    "87": {
+      "com": 8,
+      "element": "char11.a",
+      "label": "Small character \u00b7 top (a)",
+      "note": "",
+      "seg": 11,
+      "status": "found",
+      "time": "2026-10-01T11:01:01"
+    },
+    "88": {
+      "com": 1,
+      "element": "",
+      "label": "nothing lit",
+      "note": "",
+      "seg": 12,
+      "status": "nothing",
+      "time": "2026-10-01T10:59:47"
+    },
+    "89": {
+      "com": 2,
+      "element": "icon.antenna",
+      "label": "Antenna / signal bars",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T10:59:41"
+    },
+    "9": {
+      "com": 2,
+      "element": "big2.f",
+      "label": "Big digit 2 \u00b7 upper left (f)",
+      "note": "",
+      "seg": 2,
+      "status": "confirmed",
+      "time": "2026-10-01T10:54:50"
+    },
+    "90": {
+      "com": 3,
+      "element": "icon.sad",
+      "label": "Sad face with cross",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T10:59:53"
+    },
+    "91": {
+      "com": 4,
+      "element": "icon.smile",
+      "label": "Smiling face",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T10:59:58"
+    },
+    "92": {
+      "com": 5,
+      "element": "icon.smile",
+      "label": "Smiling face",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T11:00:12"
+    },
+    "93": {
+      "com": 6,
+      "element": "icon.switch",
+      "label": "Switch contact",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T11:00:03"
+    },
+    "94": {
+      "com": 7,
+      "element": "icon.switch",
+      "label": "Switch contact",
+      "note": "",
+      "seg": 12,
+      "status": "found",
+      "time": "2026-10-01T11:00:17"
+    },
+    "96": {
+      "com": 1,
+      "element": "icon.antenna",
+      "label": "Antenna / signal bars",
+      "note": "",
+      "seg": 13,
+      "status": "found",
+      "time": "2026-10-01T10:59:29"
+    },
+    "98": {
+      "com": 3,
+      "element": "icon.quad",
+      "label": "Quadrant (\u2295) symbol",
+      "note": "",
+      "seg": 13,
+      "status": "found",
+      "time": "2026-10-01T10:59:14"
+    }
+  }
+}

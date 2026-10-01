@@ -1,0 +1,160 @@
+{
+  "name": "ht5023",
+  "displayName": "HT5023",
+  "description": "Build, flash and monitor Holtek HT5023 (Cortex-M0) boards from VS Code \u2014 SDK examples with make, Arduino sketches and PlatformIO projects, over SWD or the UART bootloader.",
+  "version": "1.0.0",
+  "publisher": "ht5023",
+  "license": "Apache-2.0",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "HT5023",
+    "Holtek",
+    "Cortex-M0",
+    "embedded",
+    "arduino"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/platformio.ini",
+    "workspaceContains:**/Makefile",
+    "workspaceContains:**/*.ino"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ht5023.build",
+        "title": "Build",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.upload",
+        "title": "Upload (J-Link / SWD)",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.uploadUsb",
+        "title": "Upload over USB (bootloader)",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.monitor",
+        "title": "Serial Monitor",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.clean",
+        "title": "Clean",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.selectExample",
+        "title": "Select SDK Example",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.selectPort",
+        "title": "Select Serial Port",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.installBootloader",
+        "title": "Install UART Bootloader (once, needs J-Link)",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.newProject",
+        "title": "New PlatformIO Project",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.doctor",
+        "title": "Check Toolchain",
+        "category": "HT5023"
+      },
+      {
+        "command": "ht5023.openFlasher",
+        "title": "Open the standalone Flasher GUI",
+        "category": "HT5023"
+      }
+    ],
+    "configuration": {
+      "title": "HT5023",
+      "properties": {
+        "ht5023.sdkPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the HT5023 SDK checkout (the folder with the Makefile and sdk/). Leave empty to auto-detect from the workspace."
+        },
+        "ht5023.example": {
+          "type": "string",
+          "default": "blinky",
+          "description": "Which examples/<name> the Makefile workflow builds."
+        },
+        "ht5023.serialPort": {
+          "type": "string",
+          "default": "",
+          "description": "Serial port for the monitor and USB uploads. Empty means auto-detect."
+        },
+        "ht5023.serialBaud": {
+          "type": "number",
+          "default": 115200,
+          "description": "Baud rate for the serial monitor."
+        },
+        "ht5023.jlinkSpeed": {
+          "type": "number",
+          "default": 1000,
+          "description": "SWD clock in kHz."
+        },
+        "ht5023.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python interpreter used for the SDK's flash and bootloader tools."
+        },
+        "ht5023.flashEraseMode": {
+          "type": "string",
+          "enum": [
+            "mass",
+            "pages"
+          ],
+          "default": "mass",
+          "description": "Erase strategy for the .vscode Flash task."
+        },
+        "ht5023.runAfterFlash": {
+          "type": "string",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "1",
+          "description": "Reset and run the target after the .vscode Flash task."
+        }
+      }
+    },
+    "taskDefinitions": [
+      {
+        "type": "ht5023",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "build | upload | clean"
+          }
+        }
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ht05/HT5023_SDK"
+  }
+}

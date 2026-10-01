@@ -1,0 +1,191 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "HT5023: Build",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "build",
+        "EXAMPLE=${config:ht5023.example}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Compile the configured default example into build/app.elf and build/app.bin.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "HT5023: Build Example...",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "build",
+        "EXAMPLE=${input:ht5023Example}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Compile a specific example chosen from the picker.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "HT5023: Clean",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "clean"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Remove the build/ directory.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "HT5023: Rebuild",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "HT5023: Clean",
+        "HT5023: Build"
+      ]
+    },
+    {
+      "label": "HT5023: Flash",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "flash",
+        "SPEED=${config:ht5023.jlinkSpeed}",
+        "ERASE_MODE=${config:ht5023.flashEraseMode}",
+        "RUN_AFTER_FLASH=${config:ht5023.runAfterFlash}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Flash build/app.bin with the workspace default J-Link settings.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "HT5023: One-Click Flash",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "HT5023: Build",
+        "HT5023: Flash"
+      ]
+    },
+    {
+      "label": "HT5023: J-Link Detect",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "detect",
+        "SPEED=${config:ht5023.jlinkSpeed}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Probe the target over SWD and read the CPUID register.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "HT5023: J-Link Read Registers",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "regs",
+        "SPEED=${config:ht5023.jlinkSpeed}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Read the standard register dump script through J-Link.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "HT5023: List Examples",
+      "type": "shell",
+      "command": "make",
+      "args": [
+        "list-examples"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Print the supported EXAMPLE names from the Makefile.",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "ht5023Example",
+      "type": "pickString",
+      "description": "Choose the HT5023 example to build",
+      "default": "blinky",
+      "options": [
+        "blinky",
+        "led_dance",
+        "buzzer_music",
+        "st7789_demo",
+        "st7789_ui_demo",
+        "st7789_ui_dma_demo",
+        "dashboard_demo",
+        "energy_meter_dashboard",
+        "touch_ui_demo",
+        "uart",
+        "uart_ansi",
+        "ansi_art",
+        "ansi_art_game",
+        "boot_banner",
+        "wdt_monitor",
+        "timer_poll",
+        "reset_info",
+        "uart_ringbuf",
+        "spi_loopback",
+        "i2c_scan",
+        "systick_irq",
+        "xpt2046_touch_demo"
+      ]
+    }
+  ]
+}

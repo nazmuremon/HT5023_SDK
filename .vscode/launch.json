@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "HT5023: Debug With J-Link",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/app.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "jlink",
+      "device": "Cortex-M0",
+      "interface": "swd",
+      "serverArgs": [
+        "-speed",
+        "${config:ht5023.jlinkSpeed}"
+      ],
+      "runToEntryPoint": "main",
+      "preLaunchTask": "HT5023: Build"
+    },
+    {
+      "name": "HT5023: Attach To Running Target",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/app.elf",
+      "request": "attach",
+      "type": "cortex-debug",
+      "servertype": "jlink",
+      "device": "Cortex-M0",
+      "interface": "swd",
+      "serverArgs": [
+        "-speed",
+        "${config:ht5023.jlinkSpeed}"
+      ]
+    }
+  ]
+}

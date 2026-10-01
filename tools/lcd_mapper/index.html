@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LCD Segment Mapper</title>
+<style>
+:root {
+  --bg: #f4f5f7; --panel: #ffffff; --ink: #1d2230; --muted: #667085; --line: #d6dae1;
+  --accent: #2f6fed; --accent-soft: #dfe9fd;
+  --glass: #dfe5d8; --seg-off: #c9d0c2; --seg-map: #6b7a61; --seg-now: #1f2a18;
+  --ok: #1f9d55; --diff: #d97706; --named: #2f6fed; --none: #98a2b3;
+  --ok-soft: #dcf5e6; --diff-soft: #fdecd3; --named-soft: #dfe9fd; --none-soft: #eceef2;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12151b; --panel: #1b1f27; --ink: #e6e9ef; --muted: #98a2b3; --line: #2c323d;
+    --accent: #6c9bff; --accent-soft: #1e2b47;
+    --glass: #2a3126; --seg-off: #3a4335; --seg-map: #8d9d82; --seg-now: #e8f5dc;
+    --ok-soft: #173826; --diff-soft: #3d2a10; --named-soft: #1e2b47; --none-soft: #252a33;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12151b; --panel: #1b1f27; --ink: #e6e9ef; --muted: #98a2b3; --line: #2c323d;
+  --accent: #6c9bff; --accent-soft: #1e2b47;
+  --glass: #2a3126; --seg-off: #3a4335; --seg-map: #8d9d82; --seg-now: #e8f5dc;
+  --ok-soft: #173826; --diff-soft: #3d2a10; --named-soft: #1e2b47; --none-soft: #252a33;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+  padding: 12px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+header h1 { font-size: 16px; margin: 0 8px 0 0; }
+.status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--none); }
+.dot.on { background: var(--ok); }
+select, input[type=text], button { font: inherit; color: inherit; }
+select, input[type=text] { background: var(--bg); border: 1px solid var(--line);
+  border-radius: 6px; padding: 5px 8px; }
+button { background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 11px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button:disabled { opacity: .45; cursor: default; }
+kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--line); border-radius: 4px;
+  padding: 0 4px; color: var(--muted); }
+button.primary kbd { color: #fff; border-color: rgba(255,255,255,.55); }
+.progress { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.bar { width: 160px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--ok); width: 0; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; padding: 16px; }
+@media (max-width: 900px) { main { grid-template-columns: 1fr; } .progress { margin-left: 0; } }
+.stack { display: grid; gap: 16px; align-self: start; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+  margin: 0 0 8px; }
+.card h2 b { color: var(--accent); }
+aside.card { align-self: start; }
+svg { width: 100%; height: auto; display: block; }
+svg .glass { fill: var(--glass); }
+svg .el { fill: var(--seg-off); cursor: pointer; transition: fill .12s; }
+svg text.el { font: 600 22px system-ui, sans-serif; }
+svg .el:hover { fill: var(--accent); }
+svg .el.mapped { fill: var(--seg-map); }
+svg .el.now { fill: var(--seg-now); }
+svg .el.target { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 5 3;
+  animation: pulse 1.1s ease-in-out infinite; }
+@keyframes pulse { 50% { stroke-opacity: .25; } }
+svg .grp { fill: none; stroke: var(--seg-off); stroke-width: 2; }
+svg .cap { fill: var(--muted); font: 11px system-ui, sans-serif; }
+.where { font-size: 20px; font-weight: 650; margin: 2px 0; }
+.sub { color: var(--muted); }
+.lit { margin: 6px 0 12px; padding: 6px 9px; border-radius: 6px; background: var(--none-soft); }
+.lit.ok { background: var(--ok-soft); } .lit.bad { background: var(--diff-soft); }
+.why { padding: 10px; border-radius: 8px; background: var(--accent-soft); margin-bottom: 10px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0; }
+.row input[type=text] { flex: 1; min-width: 0; }
+.saved { margin-top: 10px; padding: 8px 10px; border-radius: 8px; border: 1px dashed var(--line); }
+.chip { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+.s-confirmed, .s-found { background: var(--ok-soft); color: var(--ok); }
+.s-different { background: var(--diff-soft); color: var(--diff); }
+.s-named { background: var(--named-soft); color: var(--named); }
+.s-nothing { background: var(--none-soft); color: var(--none); }
+.grid-wrap { padding: 0 16px 16px; }
+table { border-collapse: collapse; width: 100%; background: var(--panel); font-size: 12px; }
+th, td { border: 1px solid var(--line); padding: 3px 5px; text-align: center; white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; }
+th.rowh { text-align: left; }
+td { cursor: pointer; min-width: 58px; }
+td.confirmed, td.found { background: var(--ok-soft); } td.different { background: var(--diff-soft); }
+td.named { background: var(--named-soft); } td.nothing { background: var(--none-soft); color: var(--none); }
+td.cur { outline: 2px solid var(--accent); outline-offset: -2px; }
+.scroll { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line); }
+pre.log { max-height: 160px; overflow: auto; margin: 0; font: 12px ui-monospace, monospace;
+  color: var(--muted); white-space: pre-wrap; }
+.warn { color: var(--diff); }
+.banner { display: none; align-items: center; gap: 12px; padding: 10px 16px;
+  background: var(--diff-soft); border-bottom: 1px solid var(--line); }
+.banner.on { display: flex; }
+</style>
+</head>
+<body>
+<header>
+  <h1>LCD Segment Mapper</h1>
+  <span class="status"><span class="dot" id="conn-dot"></span><span id="conn-text">not connected</span></span>
+  <select id="port"></select>
+  <button id="connect">Connect</button>
+  <button data-raw="t" title="every segment on">All on</button>
+  <button data-raw="b" title="every segment off">Blank</button>
+  <button data-raw="k" title="check the 29 LCD lines for shorts">Line check</button>
+  <div class="progress"><span id="count">0 / 168 marked</span><div class="bar"><i id="bar"></i></div></div>
+</header>
+<div class="banner" id="inactive">
+  <span>This tab is not driving the board — the mapper is open in another tab.</span>
+  <button id="take-over">Use this tab</button>
+</div>
+
+<main>
+  <div class="stack">
+    <section class="card">
+      <h2><b>1</b> · Click a part to light it on the board</h2>
+      <svg id="lcd-top" viewBox="0 0 1180 400" role="img" aria-label="Display: click to light"></svg>
+      <p class="sub" style="margin:8px 0 0">
+        Mapped parts light where they were found; digit segments where your drawing puts them.
+        Icons, dots and ▽ are unknown: each click lights the next untried spot in their group.
+      </p>
+    </section>
+    <section class="card">
+      <h2><b>2</b> · Click what actually lit</h2>
+      <svg id="lcd-bottom" viewBox="0 0 1180 400" role="img" aria-label="Display: mark what lit"></svg>
+      <p class="sub" style="margin:8px 0 0">Darker = already found. Not on the drawing? Name it on the right.</p>
+    </section>
+  </div>
+
+  <aside class="card">
+    <h2>Lit on the board now</h2>
+    <div class="where" id="where">–</div>
+    <div class="sub" id="where-sub"></div>
+    <div class="lit" id="lit">click a part on display 1</div>
+
+    <div class="why" id="why-box">
+      <div class="sub" id="why-how">–</div>
+      <div id="why-target" style="font-weight:600">–</div>
+      <div class="row"><button class="primary" id="accept">✓ Yes, that lit <kbd>Enter</kbd></button></div>
+    </div>
+
+    <div class="sub">Something else lit? Click it on display 2, or name it:</div>
+    <div class="row">
+      <input type="text" id="name" placeholder="e.g. L1 left arrow, kWh, battery bar 2">
+      <button id="save-name">Save</button>
+    </div>
+    <div class="row">
+      <input type="text" id="note" placeholder="optional note (faint, two segments lit, …)">
+    </div>
+    <div class="row">
+      <button id="nothing">Nothing lit <kbd>N</kbd></button>
+      <button id="again" title="light the next spot for the same part">Try next spot <kbd>Space</kbd></button>
+    </div>
+    <div class="saved" id="saved">Nothing lit yet.</div>
+
+    <h2 style="margin-top:16px">Board log</h2>
+    <pre class="log" id="log"></pre>
+    <p class="sub" id="path" style="margin-bottom:0;overflow-wrap:anywhere"></p>
+  </aside>
+</main>
+
+<div class="grid-wrap">
+  <div class="scroll"><table id="grid"></table></div>
+</div>
+
+<script>
+"use strict";
+const POSITIONS = 168;
+const PADS = ["PB0","PB1","PF5","PF6","PF7","PB11","PB6","PB7","PB8","PB9","PB10","PF3","PF4",
+              "PD6","PA2","PA1","PA0","PA3","PA4","PD0","PD1"];
+
+// From the paper drawing: the glass SEG line of each digit, and the COM (1*..7*)
+// of each of its segments.
+const LINE_OF = {big1: 1, big2: 2, big3: 3, big4: 4, big5: 21, big6: 20, big7: 19, big8: 18,
+                 small1: 5, small2: 6, small3: 7, small4: 8, small5: 9};
+const DIGIT_ON = Object.fromEntries(Object.entries(LINE_OF).map(([d, s]) => [s, d]));
+const STAR_SEG = {1: "a", 2: "f", 3: "b", 4: "g", 5: "e", 6: "c", 7: "d"};
+const SEG_STAR = Object.fromEntries(Object.entries(STAR_SEG).map(([c, s]) => [s, +c]));
+const SEG_NAME = {a: "top (a)", b: "upper right (b)", c: "lower right (c)", d: "bottom (d)",
+                  e: "lower left (e)", f: "upper left (f)", g: "middle (g)"};
+const HINTS = {10: "boxed character / T", 11: "small character", 12: "relay / battery / faces",
+               13: "L1 row", 14: "L2 row", 15: "L3 row", 16: "CREDIT / battery / triangles", 17: "kWArhz"};
+const digitName = d => d.startsWith("big") ? `Big digit ${d.slice(3)}` : `Small digit ${d.slice(5)}`;
+const segOf = i => Math.floor(i / 8) + 1;
+const comOf = i => i % 8 + 1;
+const pos = (seg, com) => (seg - 1) * 8 + (com - 1);
+const line = seg => [1, 2, 3, 4, 5, 6, 7, 8].map(c => pos(seg, c));
+
+// Where a part should light according to the paper drawing (digit a-g only).
+function predicted(el) {
+  const m = /^(big\d|small\d)\.([a-g])$/.exec(el);
+  return m ? pos(LINE_OF[m[1]], SEG_STAR[m[2]]) : null;
+}
+// Unknown parts: the spots worth trying, most likely first.
+function candidates(el) {
+  let m;
+  if ((m = /^(big|small)(\d)\.dp$/.exec(el))) {
+    const d = `${m[1]}${m[2]}`, next = `${m[1]}${+m[2] + 1}`;
+    return [pos(LINE_OF[d], 8), ...(LINE_OF[next] ? [pos(LINE_OF[next], 8)] : [])];
+  }
+  if ((m = /^big(\d)\.tri$/.exec(el))) return [pos(LINE_OF[`big${m[1]}`], 8), ...line(16)];
+  if (/^(box10\.|icon\.T$)/.test(el)) return line(10);
+  if (/^char11\./.test(el)) return line(11);
+  if (/^icon\.(relay|switch|batt_x|smile|sad)$/.test(el)) return line(12);
+  if ((m = /^icon\.L([123])/.exec(el))) return line(12 + +m[1]);
+  if (/^icon\.(antenna|quad)$/.test(el)) return [...line(13), ...line(14), ...line(15)];
+  if (/^icon\.credit/.test(el)) return line(16);
+  if (/^icon\.unit_/.test(el)) return line(17);
+  return [];
+}
+
+// ------------------------------------------------------------ drawing --
+const NS = "http://www.w3.org/2000/svg";
+const names = {};                                      // part id -> human name
+
+function buildDisplay(svg, onClick) {
+  const add = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+    parent.appendChild(e);
+    return e;
+  };
+  const el = (tag, id, name, attrs, content) => {
+    const e = add(tag, {...attrs, class: "el", "data-el": id});
+    if (content !== undefined) e.textContent = content;  // before the title, which it would erase
+    add("title", {}, e).textContent = name;
+    names[id] = name;
+    e.addEventListener("click", () => onClick(id));
+    return e;
+  };
+  const text = (x, y, s) => { add("text", {x, y, class: "cap", "text-anchor": "middle"}).textContent = s; };
+  const digit = (x, y, w, h, id, name) => {
+    const t = Math.max(5, w * 0.16), half = h / 2, r = t / 2;
+    const rects = {
+      a: [x + t, y, w - 2 * t, t], d: [x + t, y + h - t, w - 2 * t, t],
+      g: [x + t, y + half - t / 2, w - 2 * t, t],
+      f: [x, y + t * 0.8, t, half - t * 1.3], b: [x + w - t, y + t * 0.8, t, half - t * 1.3],
+      e: [x, y + half + t * 0.5, t, half - t * 1.3], c: [x + w - t, y + half + t * 0.5, t, half - t * 1.3],
+    };
+    for (const [s, [rx, ry, rw, rh]] of Object.entries(rects))
+      el("rect", `${id}.${s}`, `${name} · ${SEG_NAME[s]}`, {x: rx, y: ry, width: rw, height: rh, rx: r});
+  };
+
+  add("rect", {x: 0, y: 0, width: 1180, height: 400, rx: 16, class: "glass"});
+  for (let i = 0; i < 5; i++) {                        // small digits, glass SEG5-9
+    const x = 30 + i * 62, y = 34, id = `small${i + 1}`;
+    digit(x, y, 38, 70, id, digitName(id));
+    el("circle", `${id}.dp`, `${digitName(id)} · dot`, {cx: x + 47, cy: y + 66, r: 4.5});
+    text(x + 19, y + 92, `SEG${i + 5}`);
+  }
+  el("rect", "box10.frame", "Boxed character · frame", {x: 350, y: 24, width: 66, height: 88, rx: 6, "fill-opacity": .35});
+  digit(364, 34, 38, 68, "box10", "Boxed character");
+  el("text", "icon.T", "T", {x: 438, y: 88, "text-anchor": "middle"}, "T");
+  digit(462, 48, 24, 44, "char11", "Small character");
+  text(410, 128, "SEG10 · SEG11");
+  add("rect", {x: 510, y: 22, width: 220, height: 96, rx: 10, class: "grp"});
+  el("rect", "icon.relay", "Relay coil symbol", {x: 526, y: 34, width: 36, height: 22, rx: 3});
+  el("rect", "icon.switch", "Switch contact", {x: 530, y: 86, width: 70, height: 7, rx: 3, transform: "rotate(-16 530 89)"});
+  el("rect", "icon.batt_x", "Battery with cross", {x: 580, y: 36, width: 40, height: 20, rx: 3});
+  el("circle", "icon.smile", "Smiling face", {cx: 660, cy: 48, r: 17});
+  el("circle", "icon.sad", "Sad face with cross", {cx: 700, cy: 92, r: 17});
+  text(620, 134, "SEG12");
+  add("rect", {x: 752, y: 18, width: 410, height: 118, rx: 40, class: "grp"});
+  el("path", "icon.antenna", "Antenna / signal bars", {d: "M782 36 l12 18 l12 -18 z M790 54 h8 v40 h-8 z M812 80 h7 v14 h-7 z M825 70 h7 v24 h-7 z M838 60 h7 v34 h-7 z"});
+  el("circle", "icon.quad", "Quadrant (⊕) symbol", {cx: 890, cy: 66, r: 20});
+  ["L1", "L2", "L3"].forEach((L, k) => {
+    const y = 44 + k * 32;
+    el("text", `icon.${L}`, L, {x: 975, y, "text-anchor": "middle"}, L);
+    el("text", `icon.${L}_left`, `${L} ← arrow`, {x: 1030, y, "text-anchor": "middle"}, "←");
+    el("text", `icon.${L}_right`, `${L} → arrow`, {x: 1080, y, "text-anchor": "middle"}, "→");
+    text(1130, y - 6, `SEG${13 + k}`);
+  });
+  const MAIN_SEGS = [1, 2, 3, 4, 21, 20, 19, 18];
+  for (let i = 0; i < 8; i++) {                        // big digits
+    const x = 30 + i * 100, y = 164, id = `big${i + 1}`, n = digitName(id);
+    digit(x, y, 62, 120, id, n);
+    el("circle", `${id}.dp`, `${n} · dot`, {cx: x + 78, cy: y + 114, r: 6});
+    el("path", `${id}.tri`, `${n} · ▽ below`, {d: `M${x + 19} ${y + 138} h24 l-12 18 z`});
+    text(x + 31, y + 178, `SEG${MAIN_SEGS[i]}`);
+  }
+  add("rect", {x: 850, y: 172, width: 300, height: 70, rx: 30, class: "grp"});
+  el("rect", "icon.credit_batt", "CREDIT battery", {x: 872, y: 192, width: 44, height: 24, rx: 4});
+  el("text", "icon.credit", "CREDIT", {x: 1020, y: 216, "text-anchor": "middle"}, "CREDIT");
+  text(1000, 258, "SEG16");
+  add("rect", {x: 850, y: 276, width: 300, height: 62, rx: 30, class: "grp"});
+  "kWArhz".split("").forEach((ch, k) =>
+    el("text", `icon.unit_${ch}`, `kWArhz · ${ch}`, {x: 900 + k * 40, y: 318, "text-anchor": "middle"}, ch));
+  text(1000, 354, "SEG17");
+}
+
+const topSvg = document.getElementById("lcd-top");
+const bottomSvg = document.getElementById("lcd-bottom");
+buildDisplay(topSvg, id => lightPart(id));
+buildDisplay(bottomSvg, id => markLit(id));
+
+// ------------------------------------------------------------- state --
+let results = {positions: {}, cursor: 0};
+let connected = false, booted = false;
+// What is lit and why: {index, how: "mapped"|"predicted"|"search"|"grid", target, k, n}
+let lit = null;
+const lastTried = {};                                  // part id -> spot lit for it last
+const $ = id => document.getElementById(id);
+const escapeHtml = s => String(s).replace(/[&<>"]/g, ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[ch]));
+
+// Every tab has an id; only the tab that claimed the board last may drive it.
+const TAB = Math.random().toString(36).slice(2, 12);
+async function api(path, body, ms = 8000) {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), ms);
+  try {
+    const r = await fetch(body === undefined ? `${path}?tab=${TAB}` : path,
+      body === undefined ? {signal: ctl.signal} :
+      {method: "POST", headers: {"Content-Type": "application/json"},
+       body: JSON.stringify({...body, tab: TAB}), signal: ctl.signal});
+    const j = await r.json();
+    if (j.stale) $("inactive").classList.add("on");
+    return j;
+  } catch (e) {
+    return {ok: false, error: e.name === "AbortError" ? `no answer from the mapper in ${ms / 1000} s`
+                                                      : "the mapper server is not running"};
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Positions where a part has been found (answers saved from display 2).
+const foundAt = el => Object.entries(results.positions)
+  .filter(([, p]) => p.element === el && p.status !== "nothing").map(([i]) => +i);
+
+// Display 1: decide where to light a part.
+function lightPart(el) {
+  const found = foundAt(el);
+  if (found.length) return light(found[0], {how: "mapped", target: el});
+  const p = predicted(el);
+  if (p !== null) return light(p, {how: "predicted", target: el});
+  const all = candidates(el);
+  if (!all.length) return;
+  // Spots nobody has answered yet (all of them again once every one is answered),
+  // taking the first after the one tried last -- so "Try next spot" moves on
+  // even when nothing was saved, and answered spots simply drop out.
+  const open = all.filter(i => !results.positions[i]);
+  const pool = open.length ? open : all;
+  const after = all.indexOf(lastTried[el]);
+  const next = pool.find(i => all.indexOf(i) > after) ?? pool[0];
+  lastTried[el] = next;
+  light(next, {how: "search", target: el, k: pool.indexOf(next) + 1, n: pool.length, open: open.length});
+}
+
+// One request to the board at a time; clicks meanwhile keep only the latest.
+let showing = false, wanted = null;
+async function light(index, meta) {
+  lit = {index, ...meta};
+  $("name").value = ""; $("note").value = (results.positions[index] || {}).note || "";
+  render();
+  wanted = index;
+  if (showing) return;
+  showing = true;
+  const box = $("lit");
+  while (wanted !== null) {
+    const idx = wanted; wanted = null;
+    box.className = "lit"; box.textContent = "lighting…";
+    const r = await api("/api/show", {index: idx});
+    if (wanted !== null) continue;
+    if (r.ok) { box.className = "lit ok"; box.textContent = `lit ✓  ${r.line}`; }
+    else { box.className = "lit bad"; box.textContent = r.error || "no answer from the board"; }
+  }
+  showing = false;
+}
+
+// Display 2: record what actually lit at the lit position.
+async function save(fields) {
+  if (!lit) return;
+  const note = $("note").value.trim();
+  const r = await api("/api/label", {index: lit.index, note, ...fields});
+  if (r.ok) results = r.results;
+  render();
+}
+function markLit(el) {
+  if (!lit) { $("lit").className = "lit bad"; $("lit").textContent = "light something first: click a part on display 1"; return; }
+  let status = "found";
+  if (lit.how === "predicted" || lit.how === "mapped") status = el === lit.target ? "confirmed" : "different";
+  else if (lit.how === "grid") status = predicted(el) === lit.index ? "confirmed" : "found";
+  save({element: el, label: names[el], status});
+}
+
+// ----------------------------------------------------------- rendering --
+function shortCode(p) {
+  if (!p) return "";
+  if (p.status === "nothing") return "–";
+  const m = /^(big|small)(\d)\.(\w+)$/.exec(p.element || "");
+  if (m) return `${m[1] === "big" ? "B" : "S"}${m[2]}.${m[3]}`;
+  return (p.label || p.element || "?").replace(/^kWArhz · /, "").slice(0, 10);
+}
+
+function renderGrid() {
+  let h = "<tr><th class='rowh'>glass SEG</th>" +
+          [1, 2, 3, 4, 5, 6, 7, 8].map(c => `<th>COM ${c}*</th>`).join("") + "</tr>";
+  for (let s = 1; s <= 21; s++) {
+    const d = DIGIT_ON[s];
+    h += `<tr><th class="rowh">SEG${s} <span class="sub">${PADS[s - 1]} · ${d ? digitName(d) : (HINTS[s] || "")}</span></th>`;
+    for (let c = 1; c <= 8; c++) {
+      const i = pos(s, c), p = results.positions[i];
+      h += `<td data-i="${i}" class="${p ? p.status : ""}${lit && i === lit.index ? " cur" : ""}" ` +
+           `title="${p ? escapeHtml(p.label || "") : "not marked"}">${escapeHtml(shortCode(p))}</td>`;
+    }
+    h += "</tr>";
+  }
+  $("grid").innerHTML = h;
+}
+
+function renderDisplays() {
+  const mapped = new Set(Object.values(results.positions).filter(p => p.status !== "nothing").map(p => p.element));
+  const here = lit && results.positions[lit.index];
+  for (const svg of [topSvg, bottomSvg]) {
+    svg.querySelectorAll(".el").forEach(e => {
+      const id = e.dataset.el;
+      e.classList.toggle("mapped", mapped.has(id));
+      e.classList.toggle("target", svg === topSvg && !!lit && lit.target === id);
+      e.classList.toggle("now", svg === bottomSvg && !!here && here.element === id);
+    });
+  }
+}
+
+function renderPanel() {
+  const n = Object.keys(results.positions).length;
+  $("count").textContent = `${n} / 168 marked`;
+  $("bar").style.width = `${n / 1.68}%`;
+  if (!lit) return;
+  const s = segOf(lit.index), c = comOf(lit.index), p = results.positions[lit.index];
+  $("where").textContent = `glass SEG${s} · COM ${c}*`;
+  $("where-sub").textContent = `position ${lit.index} of 0–167 · pad ${PADS[s - 1]}`;
+  const how = {
+    mapped: "Where it was found before — checking it",
+    predicted: "Where your drawing puts it",
+    search: `Searching for it — spot ${lit.k} of ${lit.n}${lit.open ? "" : " (all tried before, going round again)"}`,
+    grid: "Picked in the grid",
+  }[lit.how];
+  $("why-how").textContent = how;
+  $("why-target").textContent = lit.target ? names[lit.target] : (predictedName(lit.index) || "—");
+  $("accept").disabled = !lit.target;
+  $("again").disabled = lit.how !== "search";
+  $("saved").innerHTML = p
+    ? `Saved for this spot: <span class="chip s-${p.status}">${p.status}</span> ${escapeHtml(p.label || "")}` +
+      (p.note ? `<div class="sub">${escapeHtml(p.note)}</div>` : "") +
+      ` <button id="clear" style="margin-left:6px">Clear</button>`
+    : "Not marked yet — click on display 2 what lit.";
+  if (p) $("clear").onclick = () => save({clear: true});
+}
+function predictedName(i) {
+  const d = DIGIT_ON[segOf(i)], s = STAR_SEG[comOf(i)];
+  return d && s ? `drawing says: ${names[`${d}.${s}`]}` : null;
+}
+
+function render() { renderGrid(); renderDisplays(); renderPanel(); }
+
+// ------------------------------------------------------------ wiring --
+$("accept").onclick = () => { if (lit && lit.target) markLit(lit.target); };
+$("nothing").onclick = () => save({element: "", label: "nothing lit", status: "nothing"});
+$("again").onclick = () => { if (lit && lit.how === "search") lightPart(lit.target); };
+$("save-name").onclick = () => {
+  const t = $("name").value.trim();
+  if (t) save({element: "custom", label: t, status: "named"});
+};
+$("name").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("save-name").click(); } });
+$("grid").addEventListener("click", e => {
+  const td = e.target.closest("td");
+  if (td) light(+td.dataset.i, {how: "grid", target: (() => {
+    const i = +td.dataset.i, d = DIGIT_ON[segOf(i)], s = STAR_SEG[comOf(i)];
+    return d && s ? `${d}.${s}` : null;
+  })()});
+});
+document.querySelectorAll("[data-raw]").forEach(b => b.onclick = async () => {
+  const r = await api("/api/raw", {cmd: b.dataset.raw});
+  $("lit").className = r.ok ? "lit" : "lit bad";
+  $("lit").textContent = r.ok ? `${b.textContent} — click a part on display 1 to light one again`
+                              : (r.error || "the board did not take it");
+});
+$("connect").onclick = async () => {
+  if (connected) await api("/api/disconnect", {});
+  else {
+    const r = await api("/api/connect", {port: $("port").value});
+    if (!r.ok) alert(r.error);
+  }
+  await poll();
+};
+document.addEventListener("keydown", e => {
+  const t = e.target;
+  if ((t instanceof Element && t.matches("input, select, textarea")) || e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (k === "enter") { e.preventDefault(); $("accept").click(); }
+  else if (k === "n") $("nothing").click();
+  else if (k === " ") { e.preventDefault(); $("again").click(); }
+});
+
+async function poll() {
+  const st = await api("/api/state", undefined, 5000);
+  if (st.ok === false) { $("conn-text").textContent = st.error; $("conn-dot").classList.remove("on"); return st; }
+  const was = connected;
+  connected = st.connected;
+  $("inactive").classList.toggle("on", !st.active);
+  if (connected && !was && booted && lit) light(lit.index, lit);   // board back: light it again
+  $("conn-dot").classList.toggle("on", connected);
+  $("conn-text").innerHTML = connected ? (st.jlink ? "connected: J-Link over SWD — CPU halted" : `connected: ${st.port}`) :
+    (st.error ? `<span class="warn">${escapeHtml(st.error)}</span>` : "not connected");
+  $("connect").textContent = connected ? "Disconnect" : "Connect";
+  document.querySelector('[data-raw="k"]').disabled = !!st.jlink;   // runs in meter_lcd, over Serial
+  const sel = $("port"), cur = st.port || sel.value;
+  const ports = st.ports.slice();
+  if (st.port && !ports.some(p => p.device === st.port)) ports.unshift({device: st.port, description: "connected"});
+  sel.innerHTML = ports.length ? ports.map(p =>
+    `<option value="${p.device}">${p.device} — ${escapeHtml(p.description)}</option>`).join("")
+    : "<option value=''>no board found</option>";
+  if (cur) sel.value = cur;
+  $("log").textContent = st.log.join("\n");
+  $("log").scrollTop = $("log").scrollHeight;
+  $("path").textContent = `Answers are saved to ${st.results_path}`;
+  return st;
+}
+
+$("take-over").onclick = async () => {
+  await api("/api/claim", {});
+  $("inactive").classList.remove("on");
+  if (lit) light(lit.index, lit);
+};
+
+(async () => {
+  await api("/api/claim", {});                           // this tab drives the board now
+  const st = await poll();
+  if (st && st.results) results = st.results;
+  booted = true;
+  render();
+  (async function loop() { await poll(); setTimeout(loop, 1500); })();
+})();
+</script>
+</body>
+</html>

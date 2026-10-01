@@ -1,0 +1,30 @@
+menu.layout=Flash layout
+
+ht5023.name=HT5023 Board
+
+ht5023.upload.tool=ht5023jlink
+ht5023.upload.tool.default=ht5023jlink
+ht5023.upload.protocol=jlink
+ht5023.upload.maximum_size=262144
+ht5023.upload.maximum_data_size=32768
+ht5023.upload.speed=1000
+
+ht5023.build.board=HT5023
+ht5023.build.core=ht5023
+ht5023.build.variant=ht5023_blinky
+ht5023.build.f_cpu=9196000L
+ht5023.build.ldscript=ht5023.ld
+
+ht5023.menu.layout.standalone=Standalone - program with J-Link (0x0000)
+ht5023.menu.layout.standalone.build.ldscript=ht5023.ld
+ht5023.menu.layout.standalone.upload.tool=ht5023jlink
+ht5023.menu.layout.standalone.upload.tool.default=ht5023jlink
+ht5023.menu.layout.standalone.upload.tool.serial=ht5023jlink
+ht5023.menu.layout.standalone.upload.speed=1000
+ht5023.menu.layout.bootloader=UART bootloader - upload over USB (0x2000)
+ht5023.menu.layout.bootloader.build.ldscript=ht5023_app.ld
+ht5023.menu.layout.bootloader.upload.tool=ht5023usb
+ht5023.menu.layout.bootloader.upload.tool.default=ht5023usb
+ht5023.menu.layout.bootloader.upload.tool.serial=ht5023usb
+ht5023.menu.layout.bootloader.upload.speed=115200
+ht5023.build.extra_flags=-DHT5023_ARDUINO_VARIANT_BLINKY

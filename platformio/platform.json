@@ -1,0 +1,16 @@
+{
+  "name": "ht5023",
+  "title": "HT5023",
+  "description": "Holtek HT5023 (ARM Cortex-M0, 256 KiB flash, 32 KiB SRAM). Builds Arduino-framework projects against the HT5023 SDK's own core, so libraries from the PlatformIO registry can be used on the part. Uploads over SWD with a SEGGER J-Link, or over USB-UART through the resident bootloader.",
+  "homepage": "https://github.com/Ht05/HT5023_SDK",
+  "license": "Apache-2.0",
+  "keywords": ["dev-platform", "Cortex-M0", "HT5023", "Holtek", "arduino"],
+  "engines": { "platformio": "^6" },
+  "frameworks": {
+    "arduino": {
+      "script": "builder/frameworks/arduino.py"
+    }
+  },
+  "packages": {},
+  "version": "1.1.0"
+}

@@ -1,0 +1,25 @@
+{
+  "build": {
+    "core": "ht5023",
+    "cpu": "cortex-m0",
+    "extra_flags": "-DARDUINO_ARCH_HT5023 -DHT5023_DISABLE_WDT_BY_DEFAULT=1 -DHT5023_ARDUINO_VARIANT_BLINKY",
+    "f_cpu": "9196000L",
+    "mcu": "ht5023",
+    "variant": "ht5023_blinky"
+  },
+  "debug": {
+    "jlink_device": "Cortex-M0",
+    "default_tools": ["jlink"]
+  },
+  "frameworks": ["arduino"],
+  "name": "HT5023 (Cortex-M0, 256K Flash, 32K RAM)",
+  "upload": {
+    "maximum_ram_size": 32768,
+    "maximum_size": 262144,
+    "protocol": "jlink",
+    "protocols": ["jlink", "bootloader"],
+    "speed": 1000
+  },
+  "url": "https://github.com/Ht05/HT5023_SDK",
+  "vendor": "Holtek"
+}

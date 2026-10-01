@@ -1,0 +1,16 @@
+{
+  "ht5023.example": "blinky",
+  "ht5023.jlinkSpeed": 1000,
+  "ht5023.serialBaud": 115200,
+  "ht5023.flashEraseMode": "mass",
+  "ht5023.runAfterFlash": "1",
+  "files.associations": {
+    "*.s": "asm"
+  },
+  "files.exclude": {
+    "**/build": true
+  },
+  "search.exclude": {
+    "**/build": true
+  }
+}

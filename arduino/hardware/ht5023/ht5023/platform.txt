@@ -1,0 +1,78 @@
+name=HT5023 Boards
+version=1.0.0
+
+compiler.path=
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.S.cmd=arm-none-eabi-gcc
+compiler.c.elf.cmd=arm-none-eabi-g++
+compiler.ar.cmd=arm-none-eabi-gcc-ar
+compiler.objcopy.cmd=arm-none-eabi-objcopy
+compiler.size.cmd=arm-none-eabi-size
+compiler.elf2bin.flags=-O binary --gap-fill 0xFF
+
+compiler.warning_flags=-Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+compiler.optimization_flags=-Os -ffunction-sections -fdata-sections -fno-builtin
+compiler.define.flags=-DARDUINO_ARCH_HT5023 -DHT5023_DISABLE_WDT_BY_DEFAULT=1
+
+compiler.c.flags=-c -mcpu=cortex-m0 -mthumb {compiler.optimization_flags} {compiler.warning_flags} -std=gnu11
+compiler.cpp.flags=-c -mcpu=cortex-m0 -mthumb {compiler.optimization_flags} {compiler.warning_flags} -fno-exceptions -fno-rtti -fno-threadsafe-statics -std=gnu++17
+compiler.c.elf.flags=-mcpu=cortex-m0 -mthumb {compiler.optimization_flags} {compiler.warning_flags} -fno-exceptions -fno-rtti -fno-threadsafe-statics
+compiler.S.flags=-c -mcpu=cortex-m0 -mthumb -x assembler-with-cpp
+compiler.ar.flags=rcs
+compiler.ld.flags=-mcpu=cortex-m0 -mthumb -nostartfiles -Wl,--gc-sections -Wl,-u,Reset_Handler -Wl,-e,Reset_Handler -Wl,-u,_init -Wl,-u,_fini -Wl,-u,_sbrk -Wl,-u,_write -Wl,-u,_read -Wl,-u,_close -Wl,-u,_lseek -Wl,-u,_fstat -Wl,-u,_isatty -Wl,-u,_exit -Wl,-u,_kill -Wl,-u,_getpid
+compiler.libraries.ldflags=
+
+build.extra_flags=
+archive_file=core.a
+archive_file_path={build.path}/{archive_file}
+
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.S.extra_flags=
+compiler.cpp.extra_flags=
+compiler.ar.extra_flags=
+
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} {compiler.define.flags} {compiler.c.extra_flags} {build.extra_flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {compiler.define.flags} {compiler.cpp.extra_flags} {build.extra_flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} {compiler.define.flags} {compiler.S.extra_flags} {build.extra_flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {includes} "{source_file}" -o "{object_file}"
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} {compiler.define.flags} {compiler.c.elf.extra_flags} {build.extra_flags} {compiler.ld.flags} -T{runtime.platform.path}/variants/{build.variant}/{build.ldscript} -Wl,-Map,{build.path}/{build.project_name}.map -o "{build.path}/{build.project_name}.elf" {object_files} {compiler.libraries.ldflags} "{archive_file_path}" -lm
+recipe.objcopy.bin.pattern="{compiler.path}{compiler.objcopy.cmd}" {compiler.elf2bin.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.text|\.data|\.isr_vector|\.ARM\.exidx|\.init_array|\.fini_array)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.ramfunc)\s+([0-9]+).*
+
+preproc.includes.flags=-w -x c++ -M -MG -MP
+recipe.preproc.includes="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {preproc.includes.flags} {compiler.define.flags} {compiler.cpp.extra_flags} {build.extra_flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {includes} "{source_file}"
+
+preproc.macros.flags=-w -x c++ -E -CC
+recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {preproc.macros.flags} {compiler.define.flags} {compiler.cpp.extra_flags} {build.extra_flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} {includes} "{source_file}" -o "{preprocessed_file_path}"
+
+pluggable_discovery.required.0=builtin:serial-discovery
+pluggable_monitor.required.serial=builtin:serial-monitor
+
+# Upload through the J-Link (Standalone layout: the sketch owns 0x0000).
+#
+# ".linux"/".macosx" suffixes override the plain key on those systems. They are
+# needed because "python" is a Windows-only spelling: most Linux distributions
+# ship only "python3" and have no "python" at all, so an unqualified {cmd}
+# fails with "command not found" the moment you press Upload.
+tools.ht5023jlink.cmd=python
+tools.ht5023jlink.cmd.linux=python3
+tools.ht5023jlink.cmd.macosx=python3
+tools.ht5023jlink.upload.params.verbose=
+tools.ht5023jlink.upload.params.quiet=
+tools.ht5023jlink.upload.pattern="{cmd}" "{runtime.platform.path}/tools/ht5023_upload.py" --method jlink --speed {upload.speed} --bin "{build.path}/{build.project_name}.bin"
+tools.ht5023jlink.program.pattern="{cmd}" "{runtime.platform.path}/tools/ht5023_upload.py" --method jlink --speed {upload.speed} --bin "{build.path}/{build.project_name}.bin"
+
+# Upload over USB-UART through the resident bootloader (UART bootloader layout:
+# the sketch is linked at 0x2000). Uses the port selected in the IDE, and the
+# board has to be reset while it is listening.
+tools.ht5023usb.cmd=python
+tools.ht5023usb.cmd.linux=python3
+tools.ht5023usb.cmd.macosx=python3
+tools.ht5023usb.upload.params.verbose=
+tools.ht5023usb.upload.params.quiet=
+tools.ht5023usb.upload.pattern="{cmd}" "{runtime.platform.path}/tools/ht5023_upload.py" --method usb --port "{serial.port}" --baud {upload.speed} --bin "{build.path}/{build.project_name}.bin"
+tools.ht5023usb.program.pattern="{cmd}" "{runtime.platform.path}/tools/ht5023_upload.py" --method usb --port "{serial.port}" --baud {upload.speed} --bin "{build.path}/{build.project_name}.bin"
